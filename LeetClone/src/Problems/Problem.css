@@ -1,0 +1,20 @@
+span.Resizer.vertical {
+    width: 5px;
+    background-color: black;
+    cursor: grab;
+    z-index: 1;
+}
+.SplitPane {
+  position: relative !important;
+}
+
+.Pane {
+  height: 100%;
+}
+span.Resizer.horizontal {
+    height: 5px;
+    background-color: gray;
+    cursor: grab;
+    z-index: 1;
+    color: #161616;
+}
