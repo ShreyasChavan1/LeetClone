@@ -9,6 +9,9 @@ const ContextProvider = ({ children }) => {
   const [navBar, setNavBar] = useState(true); 
   const [currentuser,setCurrentuser] = useState({});
   const [problem,setProblem] = useState([]);
+  const [code,setCode] = useState("");
+  const [language,setLanguage] = useState("python");
+  const [output,setOutput] = useState("");
 
   useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, (User) => {
@@ -34,7 +37,13 @@ const ContextProvider = ({ children }) => {
   currentuser,
   setCurrentuser,
   problem,
-  setProblem
+  setProblem,
+  code,
+  setCode,
+  language,
+  setLanguage,
+  output,
+  setOutput
 };
   return (
     <Mycontext.Provider value={providers}>

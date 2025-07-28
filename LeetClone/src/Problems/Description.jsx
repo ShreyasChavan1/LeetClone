@@ -13,21 +13,23 @@ const Description = () => {
       <p className='mt-12 mb-10'>
         {problem.description}
       </p>
-      <label className='text-xl font-semibold'>Example</label>
-      <div className='bg-[#2c2c2c]  mt-3 p-5 mb-3'>
-      <pre>
-        Input: nums = [1, 2, 3, 3],
 
-        Output: true
-        </pre>
-      </div>
-      <label className='text-xl font-semibold'>Example 2</label>
-      <div className='bg-[#2c2c2c] mt-3 p-5'>
+      
+      <div className="flex flex-wrap">
+  {problem.examples?.map((example, ind) => (
+    <div key={ind} className="w-fit">
+      <label className="text-xl font-semibold block mb-2">Example {ind + 1}</label>
+      <div className="bg-[#2c2c2c] p-5 mb-3 rounded-md overflow-auto flex flex-wrap">
         <pre>
-        Input: nums = [1, 2, 3, 3],
-        Output: true
-        </pre>
+input: {example.input}</pre>
+<pre>
+output: {example.output}
+</pre>        
       </div>
+    </div>
+  ))}
+</div>
+
       </div>
 
   )

@@ -20,7 +20,7 @@ const Problems = () => {
           <label className={`${problem.difficulty === "Easy" ?"text-green-500":
              problem.difficulty === "Medium" ? "text-yellow-400": 
              "text-red-500" } `}>{problem.difficulty}</label>
-          <Link to={`/Problem/${problem.name}`}>{problem.title}</Link>
+          <Link to={`/Problem/${problem.title}`}>{problem.title}</Link>
           <a href="https://youtu.be/KLlXCFG5TnA"><i class="fa-solid fa-video mt-1"></i></a>
         </div>
       ))}
