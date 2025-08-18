@@ -11,13 +11,6 @@ const problemsschema = new mongoose.Schema({
             explaination:String,
         }
     ],
-    testCases:[
-        {
-            input:String,
-            output:String,
-            hidden:{type:Boolean,default:false},
-        }
-    ],
     templates:{
         cpp:{type:String,required:true},
         python:{type:String,required:true},

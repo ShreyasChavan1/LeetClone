@@ -1,28 +1,37 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Mycontext } from '../conf/context';
+import { auth } from '../conf/config';
 import axios from 'axios'
 
-const TestCases = () => {
-  const { problem ,code,language,setOutput} = useContext(Mycontext);
+const TestCases = ({injected}) => {
+  const { problem ,code,language,setOutput,setCode,output,setSuburl} = useContext(Mycontext);
   const [parsedInput, setParsedInput] = useState(null);
   const [selectedExampleIndex, setSelectedExampleIndex] = useState(0);
-
-  const handlecode = async() =>{
-    try{
-      const result = await axios.post("http://localhost:4000/run",{code:code,language:language})
   
-      if(result.data.output){
-        setOutput(result.data.output);
-        console.log(result.data.output);
-      }else{
-        setOutput(result.data.error);
-      }
-    }
-    catch(err){
-      setOutput("error contacting server");
-    }
 
-  }
+  const final = injected(problem?.templates?.[language],code);
+  const handlecode = async () => { 
+  const title = problem.title;
+  const token = await auth.currentUser.getIdToken();
+  const res = await fetch("http://localhost:4000/submit",{
+    method:'POST',
+    headers : {
+      'Content-Type' : 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      code: final,
+      language: language,
+      prob: title
+    })
+  })
+
+  const data = await res.json();
+  setSuburl(data);
+  console.log(data);
+
+};
+
   
   const parseInput = (exampleInput) => {
   const trimmed = exampleInput.trim();
@@ -76,11 +85,12 @@ const TestCases = () => {
 
   return (
     <div className="h-full p-4 bg-[#202020] text-white">
+
       <div className="grid grid-cols-6">
         <label className="text-white text-xl font-semibold">Test Cases</label>
         <label className="text-white ml-10 text-xl font-semibold col-span-3">Output</label>
-        <button className="bg-[#2d2d2d] p-2 rounded-xl font-semibold cursor-pointer" onClick={handlecode}>Run</button>
-        <button className="bg-green-600 p-2 rounded-xl font-semibold w-20 ml-2 cursor-pointer">Submit</button>
+        <button className="bg-[#2d2d2d] p-2 rounded-xl font-semibold cursor-pointer" >Run</button>
+        <button className="bg-green-600 p-2 rounded-xl font-semibold w-20 ml-2 cursor-pointer" onClick={handlecode}>Submit</button>
       </div>
       <hr className="mt-3" />
 
@@ -124,3 +134,17 @@ const TestCases = () => {
 };
 
 export default TestCases;
+
+// const fileRef = firebase.storage().ref(`submissions/${userId}/${submissionId}.txt`);
+// await fileRef.putString(userCode);
+// const codeUrl = await fileRef.getDownloadURL();
+
+// await db.collection('submissions').insertOne({
+//   userId,
+//   problemId,
+//   language,
+//   status: 'Queued',
+//   codePath: codeUrl,
+//   createdAt: new Date(),
+//   updatedAt: new Date()
+// });

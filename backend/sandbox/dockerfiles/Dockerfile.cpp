@@ -2,4 +2,7 @@ FROM gcc:latest
 
 WORKDIR /app
 
-CMD [ "bash","-c","g++ script.cpp -o script && ./script" ]
+COPY . /app
+
+CMD [ "sh", "-c", "g++ solution.cpp -o solution 2> error.txt && ./solution < input.txt > output.txt 2> error.txt" ]
+

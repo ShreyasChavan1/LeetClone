@@ -22,18 +22,41 @@ const Problem = () => {
     .then(response => response.json())
     .then(data => setProblem(data));
   },[title]);
-  
+
   function extract(template){
     let start = "// USER CODE START";
     let end = "// USER CODE END";
-
+    
     let extracted_start = template.indexOf(start) + start.length;
     let extracted_end = template.indexOf(end);
     
     if(extracted_start < 0 || extracted_end < 0) return template;
     return template.substring(extracted_start,extracted_end);
   }
-  const onreset = () => setCode(problem?.templates?.[language] ? extract(problem.templates[language]) : "");
+
+  useEffect(() => {
+  if (problem?.templates?.[language]) {
+    setCode(extract(problem.templates[language]));
+  }
+}, [problem, language]);
+
+  function injectcode(template,usercode){
+    console.log('inject called')
+    let start = "// USER CODE START";
+    let end = "// USER CODE END";
+
+    const startindex = template?.indexOf(start) + start.length;
+    const endindex = template?.indexOf(end);
+
+    return template?.substring(0,startindex) + "\n" + usercode + "\n" + template?.substring(endindex);
+  }
+
+  const onreset = () => {
+  if (problem?.templates?.[language]) {
+    setCode(extract(problem.templates[language]));
+  }
+};
+
 
   return (
     <div className='h-screen flex flex-col'>
@@ -65,11 +88,11 @@ const Problem = () => {
                   defaultLanguage={language}
                   theme="vs-dark"
                   options={{ fontSize: 14, minimap: { enabled: false } }}
-                  value={problem?.templates?.[language] ? extract(problem.templates[language]) : ""}
+                  value={code}
                   onChange={(value)=>{setCode(value)}}
                 />
               </div>
-              <TestCases />
+              <TestCases injected={injectcode}/>
             </Split>
           </div>
         </Split>
