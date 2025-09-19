@@ -12,6 +12,7 @@ const TestCases = ({injected}) => {
   const final = injected(problem?.templates?.[language],code);
   const handlecode = async () => { 
   const title = problem.title;
+  
   const token = await auth.currentUser.getIdToken();
   const res = await fetch("http://localhost:4000/submit",{
     method:'POST',

@@ -3,5 +3,3 @@ FROM python:3.10-slim
 WORKDIR /app
 
 RUN echo "127.0.0.1 localhost" /etc/hosts
-
-CMD [ "python","script.py" ]

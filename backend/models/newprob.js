@@ -8,7 +8,7 @@ const problemsschema = new mongoose.Schema({
         {
             input:String,
             output:String,
-            explaination:String,
+            explanation:String,
         }
     ],
     templates:{
