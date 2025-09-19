@@ -12,8 +12,8 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setCurrentuser(null); // optional, just to clear fast
-      navigate('/'); // go home after logout
+      setCurrentuser(null); 
+      navigate('/'); 
     } catch (error) {
       console.error("Sign out error:", error);
     }

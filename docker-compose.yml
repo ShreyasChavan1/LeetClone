@@ -1,0 +1,56 @@
+version: '3.9'
+volumes:
+  judge_temp_data:
+services:
+    backend:
+        build: 
+            context: .
+            dockerfile: Dockerfile.backend
+        container_name: Backend_container
+        restart: always
+        env_file:
+            - .env
+        ports:
+            - "4000:4000"
+        depends_on:
+            - redis
+
+    
+    worker:
+        build: 
+            context: .
+            dockerfile: Dockerfile.worker
+        container_name: worker_container
+        restart: always
+        env_file:
+            - .env
+        depends_on:
+            - redis
+            - backend
+
+
+    executer:
+        build: 
+            context: .
+            dockerfile: Dockerfile.executer
+        container_name: executer_container
+        restart: always
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - judge_temp_data:/judge_work_dir
+            - ./Executer/runner.js:/app/executer/runner.js
+        env_file:
+            - .env
+        ports:
+            - "5000:5000"
+        depends_on:
+            - redis
+            - backend
+        
+    redis:
+        image: redis:7
+        container_name: redis
+        restart: always
+        ports: 
+            - "6379:6379"       
+        

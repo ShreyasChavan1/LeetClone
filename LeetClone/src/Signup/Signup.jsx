@@ -42,5 +42,10 @@ export default function OAuthSignInPage() {
     <AppProvider theme={theme}>
       <SignInPage signIn={signIn} providers={providers} />
     </AppProvider>
+    //appprovider sets the theme using the imported theme and signin page is the component from where we login 
+//     Wraps everything in AppProvider to apply MUI theme.
+// Renders a SignInPage component with:
+//   signIn = { signIn } → tells it what function to call when a user chooses a provider.
+//     providers = { providers } → shows the list of sign -in providers(GitHub, Google, etc.) in the UI.
   );
 }

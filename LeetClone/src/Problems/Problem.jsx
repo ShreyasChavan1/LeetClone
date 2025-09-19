@@ -23,9 +23,15 @@ const Problem = () => {
     .then(data => setProblem(data));
   },[title]);
 
+function getMarkers(language) {
+  if (language === "python") {
+    return { start: "# USER CODE START", end: "# USER CODE END" };
+  }
+  return { start: "// USER CODE START", end: "// USER CODE END" };
+}
+
   function extract(template){
-    let start = "// USER CODE START";
-    let end = "// USER CODE END";
+    const {start , end} = getMarkers(language);
     
     let extracted_start = template.indexOf(start) + start.length;
     let extracted_end = template.indexOf(end);
@@ -41,9 +47,7 @@ const Problem = () => {
 }, [problem, language]);
 
   function injectcode(template,usercode){
-    console.log('inject called')
-    let start = "// USER CODE START";
-    let end = "// USER CODE END";
+    const {start , end} = getMarkers(language);
 
     const startindex = template?.indexOf(start) + start.length;
     const endindex = template?.indexOf(end);

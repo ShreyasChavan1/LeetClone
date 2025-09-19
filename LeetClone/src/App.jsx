@@ -11,6 +11,7 @@ function Privateroute({children}){
   const {currentuser} = useContext(Mycontext);
   return currentuser ? children : <Navigate to='/'/>;
 }
+//this wrapper checks if user is logged in or not , if not then sends back to login page
 function App() {
   return (
     <>
