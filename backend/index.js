@@ -100,7 +100,7 @@ app.post('/submit',verifytoken,async(req,res)=>{
     }
 
     console.log("Code Stored to Supabase Storage")
-    const subfile = `${userid}-${Date.now()}.${language}`;
+    const subfile = `${Date.now()}-${userid}.${language}`;
     const getfireurl = await storage("Submissions",subfile,code);
     console.log("Submission document for current submission created")
     const sub = await submission.create({
