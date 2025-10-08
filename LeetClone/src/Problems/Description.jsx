@@ -10,9 +10,9 @@ const Description = () => {
       <label className={`text-xl font-semibold ${problem.difficulty === "Easy" ?"text-green-500":
              problem.difficulty === "Medium" ? "text-yellow-400": 
              "text-red-500" }`}>{problem.difficulty}</label>
-      <p className='mt-12 mb-10'>
+      <pre className='mt-12 mb-10'>
         {problem.description}
-      </p>
+      </pre>
 
       
       <div className="flex flex-wrap">

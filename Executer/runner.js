@@ -9,10 +9,10 @@ const imagemap = {
     cmd:(u)=> `python ${u}.solution.py < ${u}.input.txt > ${u}.user_output.txt 2> ${u}.error.txt`
   },
   cpp: { image: "sandbox-cpp", ext: "cpp",
-    cmd:(u)=> `g++ ${u}.solution.cpp -o ${u}.solution && ./${u}.solution < ${u}.input.txt > ${u}.user_output.txt 2> ${u}.error.txt`,
+    cmd:(u)=> `g++ ${u}.solution.cpp -o ${u}.solution 2> ${u}.error.txt && ./${u}.solution < ${u}.input.txt > ${u}.user_output.txt 2>> ${u}.error.txt`,
    },
   java: { image: "sandbox-java", ext: "java",
-    cmd:(u)=> `javac ${u}.solution.java && java -cp . solution < ${u}.input.txt > ${u}.user_output.txt 2> ${u}.error.txt`
+    cmd:(u)=> `javac ${u}.solution.java 2> ${u}.error.txt && java -cp . solution < ${u}.input.txt > ${u}.user_output.txt 2> ${u}.error.txt`
   },
   js: { image: "sandbox-js", ext: "js",
     cmd:(u)=> `node ${u}.solution.js < ${u}.input.txt > ${u}.user_output.txt 2> ${u}.error.txt`
@@ -21,15 +21,6 @@ const imagemap = {
 
 const EXECUTER_BOX = "/judge_work_dir";
 const SANDBOX = "/sandbox_exec_dir";
-// async function ensureDirExists(dir) {
-//     try {
-//         await fsp.mkdir(dir, { recursive: true });
-//         console.log(`${dir} is ready.`);
-//     } catch (err) {
-//         console.error(`Failed to create ${dir}:`, err);
-//     }
-// }
-
 //to run dockercommand
 function runDockercommand(args,errorr){
     let child;
@@ -76,6 +67,8 @@ function runDockercommand(args,errorr){
     })
     return Promise.race([Dockerprocess,timeoutprocess]);
 }
+
+
 function normalize(str){
   return str.replace(/\r\n/g,'\n')
   .replace(/\s+$/gm,'')
@@ -102,6 +95,7 @@ function compareOutput(useroutput,expeced){
         if(ended1 && ended2 && !resolved){
           resolved = true;
           const u = normalize(bf1);
+          console.log(bf1)
           const v = normalize(bf2);
           resolve({
             verdict:u === v,
@@ -158,15 +152,12 @@ const runCode =  async (code,language,prob,subID) => {
     }
 
     // Ensure the directory exists
-    
-
     fs.writeFileSync(filepath, code);
     fs.writeFileSync(useroutputfile,"")
     fs.writeFileSync(errorr,"");
     fs.writeFileSync(inputfile,inputcontent);
     fs.writeFileSync(outputfile,outputcontent);
 
-    //here
     const commandtorun = config.cmd(uniqueprefix);
     let run;
       run = await runDockercommand([
@@ -203,7 +194,7 @@ const runCode =  async (code,language,prob,subID) => {
         Result.expected = compare.expected
         Result.useroutput = compare.user;
         console.log(compare.user+" u")
-        console.log(compare.expected+" e")
+        // console.log(compare.expected+" e")
         if(compare.verdict){
           Result.verdict = "Accepted";
         }else{
@@ -230,3 +221,4 @@ const runCode =  async (code,language,prob,subID) => {
 
 
 module.exports = runCode;
+

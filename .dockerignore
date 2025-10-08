@@ -1,10 +1,11 @@
 # Ignore frontend (not needed in backend container)
-LeetClone/
+
 
 # Ignore dependencies (they get installed fresh in container)
 node_modules/
 backend/node_modules/
 backend/Executer/node_modules/
+LeetClone/node_modules/
 
 # Ignore logs and temp files
 *.log

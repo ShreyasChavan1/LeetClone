@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 
 
 const Problem = () => {
-  const { navBar,setProblem ,code,setCode,language,problem} = useContext(Mycontext);
+  const { navBar,setProblem ,code,setCode,language,problem,status,setStatus} = useContext(Mycontext);
   const [submissions, setSubmissions] = useState(false);
   const {title} = useParams();
   
@@ -23,6 +23,11 @@ const Problem = () => {
     .then(data => setProblem(data));
   },[title]);
 
+  useEffect(() => {
+  if (status === "Completed") {
+    setSubmissions(true);
+  }
+}, [status]);
 function getMarkers(language) {
   if (language === "python") {
     return { start: "# USER CODE START", end: "# USER CODE END" };
@@ -44,7 +49,7 @@ function getMarkers(language) {
   if (problem?.templates?.[language]) {
     setCode(extract(problem.templates[language]));
   }
-}, [problem, language]);
+}, [problem, language]);//use useref for instead of setcode to avoid rerender after every letter type
 
   function injectcode(template,usercode){
     const {start , end} = getMarkers(language);
@@ -57,6 +62,7 @@ function getMarkers(language) {
 
   const onreset = () => {
   if (problem?.templates?.[language]) {
+    setStatus("")
     setCode(extract(problem.templates[language]));
   }
 };

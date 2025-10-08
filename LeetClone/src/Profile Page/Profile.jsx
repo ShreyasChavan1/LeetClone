@@ -1,24 +1,86 @@
 import './Profile.css'
 import Navbar from '../Navbar/Navbar'
-import avtar from '../assets/avatar.png'
 import ProgressRing from './circular'
-import { useContext } from 'react'
+import { useContext ,useEffect, useMemo} from 'react'
 import { Mycontext } from '../conf/context'
+import { auth } from '../conf/config'
+import { Link } from 'react-router-dom'
 const Profile = () => {
-  const {currentuser} = useContext(Mycontext);
+  const {currentuser,problems,setSolvedQuestions,solvedQuestions} = useContext(Mycontext);
+  
+  useEffect(()=>{
+    const getunique = async() =>{
+        if(!auth.currentUser)return;
+        const token = await auth.currentUser.getIdToken();
+        const submissions = await fetch(`http://localhost:4000/Getsubmissions?frequency=Unique`,{
+          method:'GET',
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+          }
+        }
+        )
+        const data = await submissions.json()
+
+        setSolvedQuestions(data);
+    }
+    getunique();
+  },[auth.currentUser])
+ 
+  const getSolved_counts = useMemo(()=>{
+    if(!solvedQuestions)return {easy:0,medium:0,hard:0};
+     return solvedQuestions.reduce((count,problem)=>{
+      if(problem.difficulty === "Easy")count.easy++;
+      else if(problem.difficulty === "Medium")count.medium++;
+      else if(problem.difficulty === "Hard")count.hard++;
+      return count;
+    },{easy:0,medium:0,hard:0})
+  },[solvedQuestions])
+
+  const getReal_counts = useMemo(()=>{
+    if(!problems)return{easy:0,medium:0,hard:0}
+    return problems.reduce((count,problem)=>{
+      if(problem.difficulty === "Easy")count.easy++;
+      else if(problem.difficulty === "Medium")count.medium++;
+      else if(problem.difficulty === "Hard")count.hard++;
+      return count;
+    },{easy:0,medium:0,hard:0})
+  },[problems])
+
+  let Rank = "Unranked";
+  const Rakings = {
+    100 : "Apprentice",
+    250 : "Knight",
+    500 : "Champion",
+    1000 : "Archmage",
+    2000 : "Grandmaster of Code"
+  }
+  const milestones = Object.keys(Rakings).map(Number).sort((a,b)=> a-b);
+
+  for(let milstone of milestones){
+    if(solvedQuestions.length >= milstone){
+      Rank = Rakings[milstone]
+    }
+  }
+
+
+console.log(currentuser)
+  if (!currentuser || !problems || !solvedQuestions) {
+    return <div>Loading...</div>; 
+  }
   return (
     <div className="bg-[#1A1A1A] h-[100vh] flex flex-col">
       <Navbar/>
       <div className=" h-[33vh] mt-5  flex flex-row justify-center">
 
-        {/* upper row */}
-        <div className="bg-[#282828] h-[20vh] w-[23vw] rounded-xl m-4 flex flex-row">
-          <img className='h-25 rounded-xl m-4' src={currentuser.avatar} alt="" />
-        <div className="mt-5  h-23 flex flex-col">
-          <span className='text-white text-xl font-semibold'>{currentuser.name}</span>
-          <span className='text-[#878787] text-[13px]'>{currentuser.email}</span>
-          <button className="h-10 w-40 bg-[#3eff1722] text-[#3eff17c7] font-semibold rounded-sm mt-1.5 cursor-pointer">Edit Profile</button>
-        </div>  
+        <div className="bg-[#282828] h-[30vh] w-[23vw] rounded-xl m-4 flex flex-col items-center justify-center">
+          <Link to='/Profile'><img className='h-25 rounded-xl' src={currentuser.avatar} alt="" /></Link>
+          <div className="mt-2 h-23 flex flex-col items-center">
+            <span className='text-white text-xl font-semibold'>{currentuser.name}</span>
+            <span className='text-[#878787] text-[13px]'>{currentuser.email}</span>
+            <button className={`h-10 w-40 bg-[#3eff1722] 
+              ${Rank === "Grandmaster of Code" ? "text-amber-300" : "text-[#3eff17c7]"} font-semibold rounded-sm mt-1.5 cursor-pointer`}>{Rank}</button>
+          </div>
         </div>
 
         <div className="bg-[#282828] h-[30vh] w-[26vw] rounded-xl m-4 grid grid-cols-2 ">
@@ -28,26 +90,35 @@ const Profile = () => {
           <div className="ml-5">
             <div className="bg-[#373737] h-15 w-27 rounded-xl self-end mx-3 my-2 text-center">
               <label className='text-green-500 font-semibold text-sm'>Easy</label><br />
-              <label className='text-white text-sm font-semibold'>Easy</label>
+              <label className='text-white text-sm font-semibold'>{getSolved_counts.easy}/{getReal_counts.easy}</label>
             </div>
 
             <div className="bg-[#373737] h-15 w-27 rounded-xl self-end mx-3 my-2 text-center">
               <label className='text-yellow-400 font-semibold text-sm'>Medium</label><br />
-              <label className='text-white text-sm font-semibold'>Medium</label>
+              <label className='text-white text-sm font-semibold'>{getSolved_counts.medium}/{getReal_counts.medium}</label>
             </div>
             <div className="bg-[#373737] h-15 w-27 rounded-xl self-end mx-3 my-2 text-center">
               <label className='text-red-400 font-semibold text-sm'>Hard</label><br />
-              <label className='text-white text-sm font-semibold'>Hard</label>
+              <label className='text-white text-sm font-semibold'>{getSolved_counts.hard}/{getReal_counts.hard}</label>
             </div>
           </div>
         </div>
       </div>
       
       {/* previously  solved */}
-      <div className="bg-[#282828] h-[52vh] w-[53vw] rounded-xl mt-5 self-center p-8">
-        <div className="">
-          <h2 className="text-white font-semibold">Previously Solved</h2>
-        </div>
+      <div className="bg-[#262626] h-[52vh] w-[53vw] rounded-xl mt-5 self-center p-4 overflow-y-scroll hide-scrollbar">
+        {solvedQuestions?.length > 0 ? (
+          solvedQuestions.map((question, key) => (
+            <div key={key} className="bg-[#353535] p-2 rounded-xs">
+              <h2 className="text-white font-semibold ml-2">{question.name}</h2>
+              <h5 className="text-gray-400 font-semibold ml-2">{question.difficulty}</h5>
+            </div>
+          ))
+        ) : (
+          <div className="bg-[#353535] p-2 rounded-xs">
+            <p className='text-white font-semibold'>No questions solved yet.</p>
+          </div>
+        )}
       </div>
     </div>
   )
