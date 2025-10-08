@@ -4,6 +4,7 @@ const oursubmission = require("./models/submissionmode");
 const getcode = require("./Supabase/getFromsupabase");
 const reddisconection = require("./redis")
 const axios = require("axios")
+const Redis = require('ioredis')
 
 require("dotenv").config();
 mongoose.connect(process.env.MONGO_URI)
@@ -11,7 +12,7 @@ mongoose.connect(process.env.MONGO_URI)
 .catch(err => console.error("Error while worker connecting to MongoDB:", err));
 
 
-
+const pub = new Redis('redis');
 const worker = new Worker("submissionqueue",
     async(job) => {
         const {submissionId} = job.data;
@@ -19,6 +20,7 @@ const worker = new Worker("submissionqueue",
 
         let ourdoc = "";
         let executionResult = null;
+
         try {
             ourdoc = await oursubmission.findById(submissionId);
             if(!ourdoc){
@@ -28,6 +30,11 @@ const worker = new Worker("submissionqueue",
             const fileurl = ourdoc.getfireurl;
             const lang = ourdoc.language;
             const name = ourdoc.prob;
+            ourdoc.status = "Running"
+            pub.publish("submissionUpdates",JSON.stringify({
+                submissionId,
+                status:ourdoc.status
+            }))
 
             console.log(`Fetching code from: ${fileurl}`);
             const ourcode = await getcode("Submissions",fileurl);
@@ -45,7 +52,16 @@ const worker = new Worker("submissionqueue",
             ourdoc.verdict = executionResult.verdict
             ourdoc.status = "Completed";
             ourdoc.result = executionResult.useroutput;
+            if(!ourdoc.result)ourdoc.result = executionResult.RunTimeError;
             await ourdoc.save();
+            
+            pub.publish("submissionUpdates",JSON.stringify({
+                submissionId,
+                status:ourdoc.status,
+                verdict:ourdoc.verdict,
+                result:ourdoc.result
+            }))
+
 
             console.log(`Submission ${submissionId} completed with status: ${ourdoc.status}`);
             return executionResult;
@@ -63,7 +79,12 @@ const worker = new Worker("submissionqueue",
             ourdoc.status = "Failed";
             ourdoc.result = executionResult ? executionResult.RunTimeError : "Error before execution";
             await ourdoc.save();
-
+            pub.publish("submissionUpdates",JSON.stringify({
+                submissionId,
+                status:ourdoc.status,
+                verdict:ourdoc.verdict,
+                result:ourdoc.result
+            }))
             // Return a simple object that can be serialized
             return { verdict: "Error", message: err.message, RunTimeError: executionResult ? executionResult.RunTimeError : "Unknown" };
         }
