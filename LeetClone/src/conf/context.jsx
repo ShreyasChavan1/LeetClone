@@ -22,8 +22,8 @@ const ContextProvider = ({ children }) => {
   const [verdict,setVerdict] = useState("");
   const suburl = useRef("")
   const socketRef = useRef(null);
-  useEffect(() => {
   
+  useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, (User) => {
     //this function checks if user is signedin or signed out
     // if signed in then septs all the details in state obejct or sets null otherwise

@@ -95,8 +95,9 @@ function compareOutput(useroutput,expeced){
         if(ended1 && ended2 && !resolved){
           resolved = true;
           const u = normalize(bf1);
-          console.log(bf1)
+          // console.log(bf1)
           const v = normalize(bf2);
+          // console.log(bf2)
           resolve({
             verdict:u === v,
             user:u,
@@ -139,6 +140,7 @@ const runCode =  async (code,language,prob,subID) => {
     filepath,errorr,useroutputfile,inputfile,outputfile
   ]
   const Result = {
+    
     verdict : "Error",
     useroutput : "",
     expected : "",
@@ -193,7 +195,7 @@ const runCode =  async (code,language,prob,subID) => {
         compare = await compareOutput(useroutputfile,outputfile);
         Result.expected = compare.expected
         Result.useroutput = compare.user;
-        console.log(compare.user+" u")
+        // console.log(compare.user+" u")
         // console.log(compare.expected+" e")
         if(compare.verdict){
           Result.verdict = "Accepted";
@@ -214,9 +216,9 @@ const runCode =  async (code,language,prob,subID) => {
     Result.RunTimeError = `Failed execution for ${subID}`
     return Result
   }
-  // finally{
-  //   cleanfiles(filestoclean);
-  // }
+  finally{
+    cleanfiles(filestoclean);
+  }
 };
 
 

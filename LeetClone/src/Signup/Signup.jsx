@@ -2,7 +2,7 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { SignInPage } from '@toolpad/core/SignInPage';
 import { useTheme } from '@mui/material/styles';
 import { signInWithPopup } from 'firebase/auth';
-import { auth,provider as googleprovider } from '../conf/config';
+import { auth,googleprovider,facebookprovider,githubprovider,twitterprovider } from '../conf/config';
 import { useContext } from 'react';
 import { Mycontext } from '../conf/context';
 import { useNavigate } from 'react-router-dom';
@@ -10,9 +10,9 @@ import { useNavigate } from 'react-router-dom';
 const providers = [
   { id: 'github', name: 'GitHub' },
   { id: 'google', name: 'Google' },
-  { id: 'facebook', name: 'Facebook' },
+  // { id: 'facebook', name: 'Facebook' },
   { id: 'twitter', name: 'Twitter' },
-  { id: 'linkedin', name: 'LinkedIn' },
+  // { id: 'linkedin', name: 'LinkedIn' },
 ];
 
 
@@ -22,10 +22,23 @@ export default function OAuthSignInPage() {
   const {setCurrentuser } = useContext(Mycontext);
   const signIn = async (provider) => {
     try {
-      const result = await signInWithPopup(auth, googleprovider);
-      const user = result.user;
-      console.log(user);
+      const providerId = provider.id;
+      const providerMap = {
+      google: googleprovider,
+      // facebook: facebookprovider,
+      github: githubprovider,
+      twitter: twitterprovider,
+    };
 
+    const selectedProvider = providerMap[providerId];
+
+    if (!selectedProvider) {
+      console.error(`Unsupported or undefined provider: ${provider}`);
+      return;
+    }
+      const result = await signInWithPopup(auth, selectedProvider);
+      const user = result.user;
+      console.log(user)
       setCurrentuser({
         name: user.displayName,
         email: user.email,

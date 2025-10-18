@@ -6,7 +6,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 
-const Submissions = () => {
+const Submissions = ({extract}) => {
   const {output,setAllsubmissions,allsubmissions,setCode,problem} = useContext(Mycontext)
   const [selectedcode,setSelectedcode] = useState(null)
   const [showPopup, setShowPopup] = useState(false);
@@ -22,17 +22,20 @@ const Submissions = () => {
         }
       })
       const data = await prev_submissions.json();
-
+      
       setAllsubmissions(data)
     }
     getprev()
   },[problem.title])
-  const getsubmittedcode = async(supabasepath) =>{
+  const getsubmittedcode = async(supabasepath,lang) =>{
     try{
       console.log(supabasepath)
       const submittedcode = await fetch(`http://localhost:4000/file/${supabasepath}/Submissions`);
       const Data = await submittedcode.json();
-      setSelectedcode(Data);
+      
+      const code = extract(Data,lang);
+      console.log(code)
+      setSelectedcode(code);
       setShowPopup(true);
     }catch(err){
       console.error("Error while getting submitted code",err)
@@ -47,7 +50,7 @@ const Submissions = () => {
           <div
             key={ind}
             className={`bg-[#2c2c2c] text-xl font-semibold ${submission.verdict === "Accepted" ? "text-green-500" : "text-red-500"} w-full p-3 cursor-pointer`}
-            onClick={() => getsubmittedcode(submission.getfireurl)}
+            onClick={() => getsubmittedcode(submission.getfireurl,submission.language)}
           >
             {submission.verdict === "Accepted" ? "Accepted" : "Wrong Answer"}
           </div>
@@ -60,7 +63,7 @@ const Submissions = () => {
             <h2 className="text-white text-2xl mb-3 font-bold">Submitted Code</h2>
             <div className="max-h-[400px] overflow-y-auto rounded-lg border border-gray-700">
               <SyntaxHighlighter
-                // language="cpp"
+                // language={subm}
                 style={vscDarkPlus}
                 showLineNumbers
                 customStyle={{ background: "#1e1e1e", fontSize: "14px" }}
