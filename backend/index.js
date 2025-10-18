@@ -152,7 +152,8 @@ app.get('/status/:id', async (req, res) => {
     return res.json({
       verdict:subdoc.verdict,
       status:subdoc.status,
-      result:subdoc.result
+      result:subdoc.result,
+      language:subdoc.language
     })
   } catch (err) {
     res.status(500).json({ err: 'no Submissionn exists' });

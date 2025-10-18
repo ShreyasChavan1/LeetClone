@@ -35,8 +35,10 @@ function getMarkers(language) {
   return { start: "// USER CODE START", end: "// USER CODE END" };
 }
 
-  function extract(template){
-    const {start , end} = getMarkers(language);
+  function extract(template,lang){
+
+    const currentLanguage = lang || language; 
+    const {start , end} = getMarkers(currentLanguage);
     
     let extracted_start = template.indexOf(start) + start.length;
     let extracted_end = template.indexOf(end);
@@ -81,7 +83,7 @@ function getMarkers(language) {
           );
         }} >
           <div className="w-full p-5 rounded-xl overflow-y-scroll hide-scrollbar">
-            {submissions ? <Submissions /> : <Description />}
+            {submissions ? <Submissions extract={extract}/> : <Description />}
           </div>
           <div className="w-full h-full rounded-xl">
             <Split mode="vertical" renderBar={({ onMouseDown, ...props }) => {
