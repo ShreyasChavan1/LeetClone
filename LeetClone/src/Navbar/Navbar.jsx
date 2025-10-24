@@ -18,26 +18,39 @@ const Navbar = () => {
       console.error("Sign out error:", error);
     }
   };
-  return (
-    <div className="bg-[#282828] h-[7vh] text-x1 text-stone-400 font-medium flex  flex-row justify-between">
-        <ul className='flex flex-row space-x-10 mt-3 mx-50'>
-            <li><img src={Leet} /></li>
-            <li className={`hover:text-amber-50 cursor-pointer ${pathname === "/Profile" ? "text-white" : ""}`}>
-              <Link to='/Profile'>Profile</Link></li>
-            <li className={`hover:text-amber-50 cursor-pointer ${pathname === "/Problems" ? "text-white" : ""}`}>
-              <Link to='/Problems'>Problems</Link></li>
-        </ul>
+ return (
+  <div className="bg-[#282828] h-[7vh] text-sm sm:text-base md:text-lg text-stone-400 font-medium flex flex-row justify-between items-center px-2 sm:px-4 md:px-6 lg:px-10">
+    
+ 
+    <ul className="flex flex-row justify-around space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-10 mt-2 sm:mt-0">
+      <li>
+        <img src={Leet} alt="Logo" className="h-4 sm:h-6 md:h-8" />
+      </li>
+      <li className={`hover:text-amber-50 cursor-pointer ${pathname === "/Profile" ? "text-white" : ""}`}>
+        <Link to='/Profile'>Profile</Link>
+      </li>
+      <li className={`hover:text-amber-50 cursor-pointer ${pathname === "/Problems" ? "text-white" : ""}`}>
+        <Link to='/Problems'>Problems</Link>
+      </li>
+    </ul>
+ 
+    <ul className="flex flex-row items-center space-x-1 sm:space-x-2 md:space-x-3 mt-2 sm:mt-0">
+      <li>
+        <img src={currentuser.avatar} alt="avatar" className='rounded-xl h-6 sm:h-8' />
+      </li>
+      <li>
+        <button className='text-amber-400 hover:text-amber-500 text-xs sm:text-sm bg-[#ffaa0036] rounded-md px-2 py-1 sm:px-3 py-1 font-semibold'>
+          Subscribe
+        </button>
+      </li>
+      <li>
+        <i onClick={handleLogout} className="fa-solid fa-right-from-bracket text-sm sm:text-base text-teal-50 cursor-pointer"></i>
+      </li>
+    </ul>
 
+  </div>
+);
 
-        <ul className='flex flex-row space-x-4 mt-3 mx-50'>
-        <li>
-          <img src={currentuser.avatar} alt="avatar" className='rounded-xl h-8' />
-        </li>
-            <li className=''><button className='text-amber-400 hover:text-amber-500 text-sm  bg-[#ffaa0036] rounded-md p-1.5 font-semibold'>Subscribe</button></li>
-            <li><i onClick={handleLogout} className="fa-solid fa-right-from-bracket mt-2 text-teal-50"></i></li>
-        </ul>
-    </div>
-  )
 }
 
 export default Navbar;

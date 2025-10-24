@@ -13,7 +13,7 @@ export default function ProgressRing() {
   const solved = solvedQuestions.length;
   const percentage = (solved / total) * 100;
   return (
-    <div className="w-30 h-30 bg-[#1e1e1e] rounded-full flex items-center justify-center">
+    <div className="w-20 sm:w-24 md:w-30 h-20 sm:h-24 md:h-30 bg-[#1e1e1e] rounded-full flex items-center justify-center">
       <CircularProgressbarWithChildren
         value={percentage}
         styles={buildStyles({
@@ -23,8 +23,8 @@ export default function ProgressRing() {
         })}
       >
         <div className="text-center text-white">
-          <p className="text-x font-bold">{solved}/{total}</p>
-          <p className="text-sm text-green-400">✓ Solved</p>
+          <p className="text-lg sm:text-xl font-bold">{solved}/{total}</p>
+          <p className="text-xs sm:text-sm text-green-400">✓ Solved</p>
         </div>
       </CircularProgressbarWithChildren>
     </div>

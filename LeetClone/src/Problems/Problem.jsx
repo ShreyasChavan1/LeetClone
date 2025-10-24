@@ -14,6 +14,8 @@ import { useParams } from 'react-router-dom';
 const Problem = () => {
   const { navBar,setProblem ,code,setCode,language,problem,status,setStatus} = useContext(Mycontext);
   const [submissions, setSubmissions] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [mobileTab, setMobileTab] = useState('description'); // 'description', 'editor', 'testcases'
   const {title} = useParams();
   
   
@@ -28,6 +30,14 @@ const Problem = () => {
     setSubmissions(true);
   }
 }, [status]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 function getMarkers(language) {
   if (language === "python") {
     return { start: "# USER CODE START", end: "# USER CODE END" };
@@ -70,10 +80,44 @@ function getMarkers(language) {
 };
 
 
+  if (isMobile) {
+    return (
+      <div className='h-screen flex flex-col'>
+        {navBar && <Navbar />}
+        <div className='bg-[#1A1A1A] h-[93vh] flex flex-col flex-1 overflow-y-hidden overflow-x-hidden min-h-0'>
+          <Code_setting setSubmissions={setSubmissions} submissions={submissions} reset={onreset} mobileTab={mobileTab} setMobileTab={setMobileTab}/>
+          <div className="flex-1 overflow-y-auto">
+            {mobileTab === 'description' && (
+              <div className="w-full p-5 rounded-xl overflow-y-scroll hide-scrollbar">
+                {submissions ? <Submissions extract={extract}/> : <Description />}
+              </div>
+            )}
+            {mobileTab === 'editor' && (
+              <div className="w-full h-full">
+                <Editor
+                  height="100%"
+                  width="100%"
+                  defaultLanguage={language}
+                  theme="vs-dark"
+                  options={{ fontSize: 12, minimap: { enabled: false } }}
+                  value={code}
+                  onChange={(value)=>{setCode(value)}}
+                />
+              </div>
+            )}
+            {mobileTab === 'testcases' && (
+              <TestCases injected={injectcode}/>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className='h-screen flex flex-col'>
       {navBar && <Navbar />}
-      <div className='bg-[#1A1A1A] h-[93vh] flex flex-col flex-1 overflow-y-hidden overflow-x-hidden'>
+      <div className='bg-[#1A1A1A] h-[93vh] flex flex-col flex-1 overflow-y-hidden overflow-x-hidden min-h-0'>
         <Code_setting setSubmissions={setSubmissions} submissions={submissions} reset={onreset}/>
         <Split renderBar={({ onMouseDown, ...props }) => {
           return (

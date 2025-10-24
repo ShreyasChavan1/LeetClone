@@ -71,42 +71,42 @@ console.log(currentuser)
   return (
     <div className="bg-[#1A1A1A] h-[100vh] flex flex-col">
       <Navbar/>
-      <div className=" h-[33vh] mt-5  flex flex-row justify-center">
+      <div className=" h-[33vh] mt-5 flex flex-col sm:flex-row justify-center items-center">
 
-        <div className="bg-[#282828] h-[30vh] w-[23vw] rounded-xl m-4 flex flex-col items-center justify-center">
-          <Link to='/Profile'><img className='h-25 rounded-xl' src={currentuser.avatar} alt="" /></Link>
-          <div className="mt-2 h-23 flex flex-col items-center">
-            <span className='text-white text-xl font-semibold'>{currentuser.name}</span>
-            <span className='text-[#878787] text-[13px]'>{currentuser.email}</span>
-            <button className={`h-10 w-40 bg-[#3eff1722] 
-              ${Rank === "Grandmaster of Code" ? "text-amber-300" : "text-[#3eff17c7]"} font-semibold rounded-sm mt-1.5 cursor-pointer`}>{Rank}</button>
+        <div className="bg-[#282828] h-[30vh] w-full sm:w-[23vw] md:w-[20vw] lg:w-[18vw] rounded-xl m-2 sm:m-4 flex flex-col items-center justify-center">
+          <Link to='/Profile'><img className='h-20 sm:h-24 md:h-28 rounded-xl' src={currentuser.avatar} alt="" /></Link>
+          <div className="mt-2 flex flex-col items-center">
+            <span className='text-white text-lg sm:text-xl font-semibold'>{currentuser.name}</span>
+            <span className='text-[#878787] text-xs sm:text-sm'>{currentuser.email}</span>
+            <button className={`h-8 sm:h-10 w-32 sm:w-40 bg-[#3eff1722]
+              ${Rank === "Grandmaster of Code" ? "text-amber-300" : "text-[#3eff17c7]"} font-semibold rounded-sm mt-1.5 cursor-pointer text-xs sm:text-sm`}>{Rank}</button>
           </div>
         </div>
 
-        <div className="bg-[#282828] h-[30vh] w-[26vw] rounded-xl m-4 grid grid-cols-2 ">
-          <div className="m-10">
+        <div className="bg-[#282828] h-[30vh] w-full sm:w-[26vw] md:w-[22vw] lg:w-[20vw] rounded-xl m-2 sm:m-4 grid grid-cols-2 gap-2">
+          <div className="flex items-center justify-center">
             <ProgressRing/>
           </div>
-          <div className="ml-5">
-            <div className="bg-[#373737] h-15 w-27 rounded-xl self-end mx-3 my-2 text-center">
-              <label className='text-green-500 font-semibold text-sm'>Easy</label><br />
-              <label className='text-white text-sm font-semibold'>{getSolved_counts.easy}/{getReal_counts.easy}</label>
+          <div className="flex flex-col justify-center space-y-1">
+            <div className="bg-[#373737] h-12 sm:h-15 w-full rounded-xl text-center flex flex-col justify-center">
+              <label className='text-green-500 font-semibold text-xs sm:text-sm'>Easy</label>
+              <label className='text-white text-xs sm:text-sm font-semibold'>{getSolved_counts.easy}/{getReal_counts.easy}</label>
             </div>
 
-            <div className="bg-[#373737] h-15 w-27 rounded-xl self-end mx-3 my-2 text-center">
-              <label className='text-yellow-400 font-semibold text-sm'>Medium</label><br />
-              <label className='text-white text-sm font-semibold'>{getSolved_counts.medium}/{getReal_counts.medium}</label>
+            <div className="bg-[#373737] h-12 sm:h-15 w-full rounded-xl text-center flex flex-col justify-center">
+              <label className='text-yellow-400 font-semibold text-xs sm:text-sm'>Medium</label>
+              <label className='text-white text-xs sm:text-sm font-semibold'>{getSolved_counts.medium}/{getReal_counts.medium}</label>
             </div>
-            <div className="bg-[#373737] h-15 w-27 rounded-xl self-end mx-3 my-2 text-center">
-              <label className='text-red-400 font-semibold text-sm'>Hard</label><br />
-              <label className='text-white text-sm font-semibold'>{getSolved_counts.hard}/{getReal_counts.hard}</label>
+            <div className="bg-[#373737] h-12 sm:h-15 w-full rounded-xl text-center flex flex-col justify-center">
+              <label className='text-red-400 font-semibold text-xs sm:text-sm'>Hard</label>
+              <label className='text-white text-xs sm:text-sm font-semibold'>{getSolved_counts.hard}/{getReal_counts.hard}</label>
             </div>
           </div>
         </div>
       </div>
       
       {/* previously  solved */}
-      <div className="bg-[#262626] h-[52vh] w-[53vw] rounded-xl mt-5 self-center p-4 overflow-y-scroll hide-scrollbar">
+      <div className="bg-[#262626] h-[52vh] w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-[53vw] rounded-xl mt-5 self-center p-2 sm:p-4 overflow-y-scroll hide-scrollbar">
         {solvedQuestions?.length > 0 ? (
           solvedQuestions.map((question, key) => (
             <div key={key} className="bg-[#353535] p-2 rounded-xs">
