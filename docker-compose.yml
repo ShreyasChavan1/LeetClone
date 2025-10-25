@@ -2,20 +2,20 @@ version: '3.9'
 volumes:
   judge_temp_data:
 services:
-    # frontend:
-    #     build: 
-    #         context: .
-    #         dockerfile: Dockerfile.frontend
-    #     container_name: frontend_container
-    #     restart: always
-    #     volumes:
-    #         - ./LeetClone/src:/app/LeetClone/src
-    #     env_file:
-    #         - .env
-    #     ports:
-    #         - "5173:5173"
-    #     depends_on:
-    #         - backend
+    frontend:
+        build: 
+            context: .
+            dockerfile: Dockerfile.frontend
+        container_name: frontend_container
+        restart: always
+        volumes:
+            - ./LeetClone/src:/app/LeetClone/src
+        env_file:
+            - .env
+        ports:
+            - "5173:5173"
+        depends_on:
+            - backend
             
     backend:
         build: 
@@ -53,7 +53,6 @@ services:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - judge_temp_data:/judge_work_dir
-            - ./Executer/runner.js:/app/executer/runner.js
         env_file:
             - .env
         ports:
