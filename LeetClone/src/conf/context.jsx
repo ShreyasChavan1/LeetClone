@@ -6,6 +6,7 @@ import io from 'socket.io-client'
 
 export const Mycontext = createContext();
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const ContextProvider = ({ children }) => {
   //all the varibles needed to have access throughout the project will be declared here and this
   //provider is then wrapped around the app so that entire app can have acces to these
@@ -43,7 +44,7 @@ const ContextProvider = ({ children }) => {
 }, []);
 
 useEffect(() => {
-  socketRef.current = io("http://localhost:4000");
+  socketRef.current = io(`${BACKEND_URL}`);
 
   socketRef.current.on("connect", () => {
     console.log("✅ Connected to WebSocket server:", socketRef.current.id);
@@ -57,7 +58,7 @@ useEffect(() => {
       setVerdict(data.verdict || "Pending");
     }
     if(data.verdict !== 'Accepted'){
-      const sub = await fetch(`http://localhost:4000/status/${encodeURIComponent(suburl.current)}`)
+      const sub = await fetch(`${BACKEND_URL}/status/${encodeURIComponent(suburl.current)}`)
       const res = await sub.json();
       setOutput(res.result)
     }

@@ -10,17 +10,17 @@ import { Mycontext } from '../conf/context';
 import Submissions from './Submissions';
 import { useParams } from 'react-router-dom';
 
-
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const Problem = () => {
   const { navBar,setProblem ,code,setCode,language,problem,status,setStatus} = useContext(Mycontext);
   const [submissions, setSubmissions] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [mobileTab, setMobileTab] = useState('description'); // 'description', 'editor', 'testcases'
+  const [mobileTab, setMobileTab] = useState('description'); 
   const {title} = useParams();
   
   
   useEffect(()=>{
-    fetch(`http://localhost:4000/Problem/${title}`)
+    fetch(`${BACKEND_URL}/Problem/${title}`)
     .then(response => response.json())
     .then(data => setProblem(data));
   },[title]);

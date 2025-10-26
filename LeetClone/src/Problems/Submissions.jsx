@@ -5,7 +5,7 @@ import { signInWithCustomToken } from 'firebase/auth'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const Submissions = ({extract}) => {
   const {output,setAllsubmissions,allsubmissions,setCode,problem} = useContext(Mycontext)
   const [selectedcode,setSelectedcode] = useState(null)
@@ -14,7 +14,7 @@ const Submissions = ({extract}) => {
   useEffect(() => {
     const getprev = async() =>{
       const token = await auth.currentUser.getIdToken()
-      const prev_submissions = await fetch(`http://localhost:4000/Getsubmissions?prob_name=${encodeURIComponent(problem.title)}`,{
+      const prev_submissions = await fetch(`${BACKEND_URL}/Getsubmissions?prob_name=${encodeURIComponent(problem.title)}`,{
         method:'GET',
         headers:{
           'Content-Type':'application/json',
@@ -30,7 +30,7 @@ const Submissions = ({extract}) => {
   const getsubmittedcode = async(supabasepath,lang) =>{
     try{
       console.log(supabasepath)
-      const submittedcode = await fetch(`http://localhost:4000/file/${supabasepath}/Submissions`);
+      const submittedcode = await fetch(`${BACKEND_URL}/file/${supabasepath}/Submissions`);
       const Data = await submittedcode.json();
       
       const code = extract(Data,lang);
