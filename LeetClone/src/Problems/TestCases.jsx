@@ -2,13 +2,14 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Mycontext } from '../conf/context';
 import { auth } from '../conf/config';
 
-
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const TestCases = ({ injected }) => {
   const { problem, code, language, status, verdict, socketRef, suburl, output, setStatus } = useContext(Mycontext);
   const [parsedInput, setParsedInput] = useState(null);
   const [selectedExampleIndex, setSelectedExampleIndex] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
+  
   const final = injected(problem?.templates?.[language], code);
   const difficult = problem.difficulty
   useEffect(() => {
@@ -18,7 +19,7 @@ const TestCases = ({ injected }) => {
   const handlecode = async () => {
     const title = problem.title;
     const token = await auth.currentUser.getIdToken();
-    const res = await fetch("http://localhost:4000/submit", {
+    const res = await fetch(`${BACKEND_URL}/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

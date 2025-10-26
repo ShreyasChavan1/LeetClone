@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Mycontext } from '../conf/context'
 
 const Code_setting = ({setSubmissions,submissions,reset, mobileTab, setMobileTab}) => {
-  const {setNavBar,navBar,language,setLanguage,setStatus} = useContext(Mycontext)
+  const {setNavBar,navBar,language,setLanguage} = useContext(Mycontext)
   const isMobile = window.innerWidth < 768;
   return (
      <div className="h-[7vh] bg-[#242424] text-white px-4 flex flex-row justify-between items-center m-1">

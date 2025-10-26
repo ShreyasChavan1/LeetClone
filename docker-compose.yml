@@ -5,13 +5,13 @@ services:
     frontend:
         build: 
             context: .
-            dockerfile: Dockerfile.frontend
+            dockerfile: LeetClone/Dockerfile.frontend
         container_name: frontend_container
         restart: always
         volumes:
             - ./LeetClone/src:/app/LeetClone/src
         env_file:
-            - .env
+            - LeetClone/.env.local
         ports:
             - "5173:5173"
         depends_on:
@@ -20,11 +20,11 @@ services:
     backend:
         build: 
             context: .
-            dockerfile: Dockerfile.backend
+            dockerfile: backend/Dockerfile.backend
         container_name: Backend_container
         restart: always
         env_file:
-            - .env
+            - backend/.env
         ports:
             - "4000:4000"
         depends_on:
@@ -34,11 +34,11 @@ services:
     worker:
         build: 
             context: .
-            dockerfile: Dockerfile.worker
+            dockerfile: Queue-worker/Dockerfile.worker
         container_name: worker_container
         restart: always
         env_file:
-            - .env
+            - Queue-worker/.env
         depends_on:
             - redis
             - backend
@@ -47,14 +47,12 @@ services:
     executer:
         build: 
             context: .
-            dockerfile: Dockerfile.executer
+            dockerfile: Executer/Dockerfile.executer
         container_name: executer_container
         restart: always
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - judge_temp_data:/judge_work_dir
-        env_file:
-            - .env
         ports:
             - "5000:5000"
         depends_on:

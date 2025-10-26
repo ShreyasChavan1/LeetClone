@@ -4,8 +4,9 @@
 # Ignore dependencies (they get installed fresh in container)
 node_modules/
 backend/node_modules/
-backend/Executer/node_modules/
+Executer/node_modules/
 LeetClone/node_modules/
+Queue-worker/node_modules/
 
 # Ignore logs and temp files
 *.log

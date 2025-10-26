@@ -10,13 +10,14 @@ const storage = require('./Supabase/storeTosupabase')
 const getCode = require("./Supabase/getFromsupabase")
 const subqueue = require("./Queue-worker/queue")
 const Redis = require('ioredis')
-
+require("dotenv").config();
+const FRONTEND_URI = process.env.FRONTEND_URL
 const http = require('http');
 const {Server} = require('socket.io')
 const server = http.createServer(app);
 const io = new Server(server,{
   cors:{
-    origin:"http://localhost:5173",
+    origin:`${FRONTEND_URI}`,
     methods:["GET","POST"],
     credentials:true
   }
@@ -44,7 +45,7 @@ io.on('connection',(socket)=>{
 })
 
 
-require("dotenv").config();
+
 mongose.connect(process.env.MONGO_URI)
 .then(()=> console.log("Connected to mongo database !"))
 .catch(err => console.error("there is an error ",err));

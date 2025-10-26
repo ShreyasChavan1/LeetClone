@@ -5,6 +5,8 @@ import { useContext ,useEffect, useMemo} from 'react'
 import { Mycontext } from '../conf/context'
 import { auth } from '../conf/config'
 import { Link } from 'react-router-dom'
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const Profile = () => {
   const {currentuser,problems,setSolvedQuestions,solvedQuestions} = useContext(Mycontext);
   
@@ -12,7 +14,7 @@ const Profile = () => {
     const getunique = async() =>{
         if(!auth.currentUser)return;
         const token = await auth.currentUser.getIdToken();
-        const submissions = await fetch(`http://localhost:4000/Getsubmissions?frequency=Unique`,{
+        const submissions = await fetch(`${BACKEND_URL}/Getsubmissions?frequency=Unique`,{
           method:'GET',
           headers:{
             'Content-Type':'application/json',
