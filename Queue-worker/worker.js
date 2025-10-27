@@ -1,8 +1,8 @@
 const {Worker} = require("bullmq");
 const mongoose = require("mongoose");
-const oursubmission = require("./models/submissionmode");
-const getcode = require("./Supabase/getFromsupabase");
-const reddisconection = require("./redis")
+const oursubmission = require("../shared/submissionmode");
+const getcode = require("../shared/getFromsupabase");
+const reddisconection = require("../shared/redis")
 const axios = require("axios")
 const Redis = require('ioredis')
 
