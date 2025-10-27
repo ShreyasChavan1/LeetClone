@@ -2,13 +2,13 @@ const express = require("express");
 const app = express();
 const cors = require('cors');
 const port = 4000;
-const mongose = require("mongoose");
-const problem = require("./models/newprob");
-const verifytoken = require("./Fireebase/verifyToken")
-const submission = require("./models/submissionmode")
-const storage = require('./Supabase/storeTosupabase')
-const getCode = require("./Supabase/getFromsupabase")
-const subqueue = require("./Queue-worker/queue")
+const mongoose = require("mongoose");
+const problem = require("./shared/newprob");
+const verifytoken = require("./Firebase/verifyToken")
+const submission = require("./shared/submissionmode")
+const storage = require('./shared/storeTosupabase')
+const getCode = require("./shared/getFromsupabase")
+const subqueue = require("./shared/queue")
 const Redis = require('ioredis')
 require("dotenv").config();
 const FRONTEND_URI = process.env.FRONTEND_URL
@@ -46,7 +46,7 @@ io.on('connection',(socket)=>{
 
 
 
-mongose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI)
 .then(()=> console.log("Connected to mongo database !"))
 .catch(err => console.error("there is an error ",err));
 
