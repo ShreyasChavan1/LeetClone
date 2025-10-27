@@ -9,8 +9,7 @@ RUN npm install
 # here we are copies all the files from backend folder to curretn folder not making a copy of entire folder itself
 COPY backend/. .
 # here wer are creating copy of supabase folder itself
-COPY Queue-worker ./Queue-worker
-COPY Supabase ./Supabase 
+COPY shared ./shared
 EXPOSE 4000
 
 CMD [ "node","index.js" ]
