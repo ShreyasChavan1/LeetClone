@@ -5,7 +5,7 @@ import { signInWithCustomToken } from 'firebase/auth'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.VITE_APP_BACKEND_URL;
 const Submissions = ({extract}) => {
   const {output,setAllsubmissions,allsubmissions,setCode,problem} = useContext(Mycontext)
   const [selectedcode,setSelectedcode] = useState(null)
