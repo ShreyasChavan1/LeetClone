@@ -6,7 +6,7 @@ import { Mycontext } from '../conf/context'
 import { auth } from '../conf/config'
 import { Link } from 'react-router-dom'
 
-const BACKEND_URL = process.env.VITE_APP_BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const Profile = () => {
   const {currentuser,problems,setSolvedQuestions,solvedQuestions} = useContext(Mycontext);
   

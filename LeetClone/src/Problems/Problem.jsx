@@ -10,7 +10,7 @@ import { Mycontext } from '../conf/context';
 import Submissions from './Submissions';
 import { useParams } from 'react-router-dom';
 
-const BACKEND_URL = process.env.VITE_APP_BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const Problem = () => {
   const { navBar,setProblem ,code,setCode,language,problem,status,setStatus} = useContext(Mycontext);
   const [submissions, setSubmissions] = useState(false);

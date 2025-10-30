@@ -6,7 +6,7 @@ import io from 'socket.io-client'
 
 export const Mycontext = createContext();
 
-const BACKEND_URL = process.env.VITE_APP_BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const ContextProvider = ({ children }) => {
   //all the varibles needed to have access throughout the project will be declared here and this
   //provider is then wrapped around the app so that entire app can have acces to these

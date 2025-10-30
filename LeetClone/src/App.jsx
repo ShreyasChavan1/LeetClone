@@ -9,6 +9,7 @@ import { Routes,Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { auth } from './conf/config'
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 function Privateroute({children}){
   const {currentuser} = useContext(Mycontext);
   return currentuser ? children : <Navigate to='/'/>;
@@ -30,7 +31,7 @@ function App() {
           })
           return res.json()
         }
-        const problems = await fetchwithauth("http://localhost:4000/Problems");
+        const problems = await fetchwithauth(`${BACKEND_URL}/Problems`);
         setProblems(problems);
       };
 

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Mycontext } from '../conf/context';
 import { auth } from '../conf/config';
 
-const BACKEND_URL = process.env.VITE_APP_BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const TestCases = ({ injected }) => {
   const { problem, code, language, status, verdict, socketRef, suburl, output, setStatus } = useContext(Mycontext);
   const [parsedInput, setParsedInput] = useState(null);
