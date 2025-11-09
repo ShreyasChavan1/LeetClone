@@ -53,7 +53,7 @@ const TestCases = ({ injected }) => {
       }
     };
 
-    // ✅ 1. Function calls: two lines (["Twitter",...], [[],...])
+
     const lines = trimmed.split('\n').map(l => l.trim()).filter(Boolean);
     if (lines.length === 2) {
       const functions = safeParse(lines[0]);
@@ -171,18 +171,18 @@ const TestCases = ({ injected }) => {
         </div>
       </>) : status !== "Completed" ? (
         <>
-          <p className='text-yellow-300'>{status}...</p>
+          <p className='text-yellow-300 font-bold text-lg'>{status}...</p>
         </>
       ) : (
         <>
-          <div className={`${verdict === "Accepted" ? "text-green-400" : "text-red-500"}`}>
+          <div className={`font-bold text-lg ${verdict === "Accepted" ? "text-green-400" : "text-red-500"}`}>
             {verdict === "Accepted" ? (
               "Accepted"
             ) : (
               <>
                 {verdict}
                 <br />
-                {output}
+                <span className="font-normal text-sm text-gray-300">{output}</span>
               </>
             )}
           </div>
