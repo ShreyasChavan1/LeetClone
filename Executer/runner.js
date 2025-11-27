@@ -165,7 +165,7 @@ const runCode =  async (code,language,prob,subID) => {
       run = await runDockercommand([
         "run","--rm",
         "--network=none","-m","512m","--cpu-shares","512",
-        "-v" ,`leetcode_clone_judge_temp_data:${SANDBOX}`,
+        "-v" ,`judge_temp_data:${SANDBOX}`,
         "-w" ,`${SANDBOX}`,
         `${config.image}`,
         "bash","-c",
@@ -217,7 +217,7 @@ const runCode =  async (code,language,prob,subID) => {
     return Result
   }
   finally{
-    cleanfiles(filestoclean);
+    // cleanfiles(filestoclean);
   }
 };
 

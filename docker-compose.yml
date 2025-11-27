@@ -1,17 +1,18 @@
 version: '3.9'
 volumes:
   judge_temp_data:
+    name: judge_temp_data
 services:
     frontend:
         build: 
             context: .
-            dockerfile: LeetClone/Dockerfile.frontend
+            dockerfile: Dockerfile.frontend
         container_name: frontend_container
         restart: always
         volumes:
             - ./LeetClone/src:/app/LeetClone/src
         env_file:
-            - LeetClone/.env.local
+            - .env
         ports:
             - "5173:5173"
         depends_on:
@@ -20,11 +21,11 @@ services:
     backend:
         build: 
             context: .
-            dockerfile: backend/Dockerfile.backend
+            dockerfile: Dockerfile.backend
         container_name: Backend_container
         restart: always
         env_file:
-            - backend/.env
+            - .env
         ports:
             - "4000:4000"
         depends_on:
@@ -34,11 +35,11 @@ services:
     worker:
         build: 
             context: .
-            dockerfile: Queue-worker/Dockerfile.worker
+            dockerfile: Dockerfile.worker
         container_name: worker_container
         restart: always
         env_file:
-            - Queue-worker/.env
+            - .env
         depends_on:
             - redis
             - backend
@@ -47,9 +48,11 @@ services:
     executer:
         build: 
             context: .
-            dockerfile: Executer/Dockerfile.executer
+            dockerfile: Dockerfile.executer
         container_name: executer_container
         restart: always
+        env_file:
+            - .env
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - judge_temp_data:/judge_work_dir
