@@ -17,7 +17,7 @@ const {Server} = require('socket.io')
 const server = http.createServer(app);
 const io = new Server(server,{
   cors:{
-    origin:`${FRONTEND_URI}`,
+    origin:[`${FRONTEND_URI}`,"https://leetclone.tech","https://www.leetclone.tech"],
     methods:["GET","POST"],
     credentials:true
   }
@@ -50,10 +50,21 @@ mongose.connect(process.env.MONGO_URI)
 .then(()=> console.log("Connected to mongo database !"))
 .catch(err => console.error("there is an error ",err));
 
-app.use(cors());
+
+const allowedOrigins = [
+  "https://api.leetclone.tech","https://leetclone.tech","https://www.leetclone.tech"
+];
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
+
 app.use(express.json());
 
-
+app.get('/',(req,res)=>{
+   res.json({message:'backend is working'});
+});
 app.get('/Problems', verifytoken,async (req, res) => {
   try{
     const titles = await problem.find({});
@@ -144,7 +155,6 @@ app.post('/post',async (req,res) => {
     res.status(500).json({ error: `Failed to update problem ${err}` });
   }
 }) 
-///here you left
 app.get('/status/:id', async (req, res) => {
   try {
     const subdoc = await submission.findById(req.params.id);
