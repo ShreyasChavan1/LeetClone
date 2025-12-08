@@ -13,7 +13,8 @@ const Redis = require('ioredis')
 require("dotenv").config();
 const FRONTEND_URI = process.env.FRONTEND_URL
 const http = require('http');
-const {Server} = require('socket.io')
+const {Server} = require('socket.io');
+const ratelimiter = require("./ratelimiter");
 const server = http.createServer(app);
 const io = new Server(server,{
   cors:{
@@ -161,7 +162,7 @@ app.get('/status/:id', async (req, res) => {
   }
 }
 )
-app.post('/submit',verifytoken,async(req,res)=>{
+app.post('/submit',verifytoken,ratelimiter,async(req,res)=>{
   try{
     const {code,language,prob,difficulty} = req.body;
     const userid = req.user.uid;
