@@ -4,9 +4,7 @@ volumes:
     name: judge_temp_data
 services:   
     backend:
-        build: 
-            context: .
-            dockerfile: Dockerfile.backend
+        image: shreyaschavan702/backend:latest
         container_name: Backend_container
         restart: always
         env_file:
@@ -18,9 +16,7 @@ services:
 
     
     worker:
-        build: 
-            context: .
-            dockerfile: Dockerfile.worker
+        image: shreyaschavan702/worker:latest
         container_name: worker_container
         restart: always
         env_file:
@@ -31,9 +27,7 @@ services:
 
 
     executer:
-        build: 
-            context: .
-            dockerfile: Dockerfile.executer
+        image: shreyaschavan702/executer:latest
         container_name: executer_container
         restart: always
         env_file:

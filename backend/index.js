@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 const port = 4000;
 const mongose = require("mongoose");
+const cookie = require('cookie-parser')
 const problem = require("./models/newprob");
 const verifytoken = require("./Fireebase/verifyToken")
 const submission = require("./models/submissionmode")
@@ -28,7 +29,7 @@ const io = new Server(server,{
 const subs = new Redis('redis')
 
 subs.subscribe('submissionUpdates')
-//you  left here , go to worker to connect publish to this room
+
 subs.on('message',(channel,message)=>{
   const data = JSON.parse(message);
   const room = data.submissionId
