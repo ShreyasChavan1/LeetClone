@@ -1,0 +1,44 @@
+name: leetclone_cd
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    build_image:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: docker login
+              run: echo ${{secrets.DOCKER_PASS}} | docker login -u ${{secrets.DOCKER_USER}} --password-stdin
+            
+            - name: build and push backend
+              run: |
+               docker build -t ${{secrets.DOCKER_USER}}/backend:latest -f Dockerfile.backend . 
+               docker push ${{secrets.DOCKER_USER}}/backend:latest
+
+            - name: build executer
+              run: | 
+                docker build -t ${{secrets.DOCKER_USER}}/executer:latest -f Dockerfile.executer . 
+                docker push ${{secrets.DOCKER_USER}}/executer:latest
+
+            - name: build worker
+              run: | 
+               docker build -t ${{secrets.DOCKER_USER}}/worker:latest -f Dockerfile.worker .
+               docker push ${{secrets.DOCKER_USER}}/worker:latest
+    
+    deploy_image:
+        needs: build_image
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: appleboy/ssh-action@v1.0.3
+              with:
+                host: ${{secrets.SSH_HOST}}
+                username: ${{secrets.SSH_USER}}
+                key: ${{secrets.SSH_KEY}}
+                script: |
+                    docker compose pull
+                    docker compose up -d
