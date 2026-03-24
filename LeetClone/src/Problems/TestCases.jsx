@@ -30,7 +30,8 @@ const TestCases = ({ injected }) => {
         language: language,
         prob: title,
         difficulty: difficult
-      })
+      }),
+      credentials:"include"
     })
     const data = await res.json();
     suburl.current = data.submissionID
