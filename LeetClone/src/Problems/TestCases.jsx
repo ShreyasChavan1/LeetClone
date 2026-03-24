@@ -19,7 +19,7 @@ const TestCases = ({ injected }) => {
   const handlecode = async () => {
     const title = problem.title;
     const token = await auth.currentUser.getIdToken();
-    const res = await fetch(`${BACKEND_URL}/submit`, {
+    const res = await fetch(`https://98.70.30.207/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
