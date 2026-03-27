@@ -74,17 +74,10 @@ useEffect(() => {
   };
 }, []); // Run once to establish connection
 
-let prevId = null;
+
 
 useEffect(() => {
-  if (socketRef.current && suburl.current) {
-    if (prevId) {
-      socketRef.current.emit('leaveSubmission', prevId);
-    }
-
-    socketRef.current.emit('joinSubmission', suburl.current);
-    prevId = suburl.current;
-
+  if (suburl.current) {
     fetch(`${BACKEND_URL}/status/${encodeURIComponent(suburl.current)}`)
       .then(res => res.json())
       .then(data => {
