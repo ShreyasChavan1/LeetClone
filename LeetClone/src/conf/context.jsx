@@ -81,9 +81,11 @@ useEffect(() => {
     fetch(`${BACKEND_URL}/status/${encodeURIComponent(suburl.current)}`)
       .then(res => res.json())
       .then(data => {
-        setStatus(data.status);
-        setVerdict(data.verdict);
-        setOutput(data.result);
+        if(data.status && data.status !== "Pending"){
+          setStatus(data.status);
+          setVerdict(data.verdict);
+          setOutput(data.result);
+        }
       });
   }
 }, [suburl.current]);
