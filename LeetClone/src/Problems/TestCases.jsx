@@ -6,7 +6,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
  
 const TestCases = ({ injected }) => {
   const prevIdRef = useRef(null);
-  const { problem, code, language, status, verdict, socketRef, suburl, output, setStatus } = useContext(Mycontext);
+  const { problem, code, language, status, verdict, socketRef, suburl, output, setStatus ,setVerdict} = useContext(Mycontext);
   const [parsedInput, setParsedInput] = useState(null);
   const [selectedExampleIndex, setSelectedExampleIndex] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -39,6 +39,8 @@ const TestCases = ({ injected }) => {
   
 
 suburl.current = data.submissionID;
+  setStatus("Pending");
+setVerdict("Pending");
 // leave previous room
 if (socketRef.current && prevIdRef.current) {
   socketRef.current.emit('leaveSubmission', prevIdRef.current);
