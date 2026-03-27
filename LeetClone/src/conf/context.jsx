@@ -57,7 +57,7 @@ useEffect(() => {
       setStatus(data.status || "Processing");
       setVerdict(data.verdict || "Pending");
     }
-    if(data.verdict !== 'Accepted'){
+    if (data.verdict && data.verdict !== 'Accepted')
       const sub = await fetch(`${BACKEND_URL}/status/${encodeURIComponent(suburl.current)}`)
       const res = await sub.json();
       setOutput(res.result)
@@ -74,12 +74,26 @@ useEffect(() => {
   };
 }, []); // Run once to establish connection
 
+let prevId = null;
+
 useEffect(() => {
   if (socketRef.current && suburl.current) {
-    console.log("changed submissionid ",suburl.current)
+    if (prevId) {
+      socketRef.current.emit('leaveSubmission', prevId);
+    }
+
     socketRef.current.emit('joinSubmission', suburl.current);
+    prevId = suburl.current;
+
+    fetch(`${BACKEND_URL}/status/${encodeURIComponent(suburl.current)}`)
+      .then(res => res.json())
+      .then(data => {
+        setStatus(data.status);
+        setVerdict(data.verdict);
+        setOutput(data.result);
+      });
   }
-}, [suburl]);
+}, [suburl.current]);
 
   const providers = {
   navBar,setNavBar,
