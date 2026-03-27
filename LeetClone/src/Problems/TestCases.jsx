@@ -34,12 +34,21 @@ const TestCases = ({ injected }) => {
       credentials:"include"
     })
     const data = await res.json();
-    suburl.current = data.submissionID
-    if (socketRef.current && suburl.current) {
-      console.log("changed submissionid ", suburl.current)
-      socketRef.current.emit('joinSubmission', suburl.current);
-    }
-    setSubmitted(true)
+   const prevIdRef = useRef(null);
+
+suburl.current = data.submissionID;
+// leave previous room
+if (socketRef.current && prevIdRef.current) {
+  socketRef.current.emit('leaveSubmission', prevIdRef.current);
+}
+// join new room
+if (socketRef.current && suburl.current) {
+  socketRef.current.emit('joinSubmission', suburl.current);
+}
+// update previous
+prevIdRef.current = suburl.current;
+
+setSubmitted(true);
   };
 
   const parseInput = (exampleInput) => {
