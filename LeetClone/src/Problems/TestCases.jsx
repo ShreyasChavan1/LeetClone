@@ -3,7 +3,9 @@ import { Mycontext } from '../conf/context';
 import { auth } from '../conf/config';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+ 
 const TestCases = ({ injected }) => {
+  const prevIdRef = useRef(null);
   const { problem, code, language, status, verdict, socketRef, suburl, output, setStatus } = useContext(Mycontext);
   const [parsedInput, setParsedInput] = useState(null);
   const [selectedExampleIndex, setSelectedExampleIndex] = useState(0);
@@ -14,7 +16,7 @@ const TestCases = ({ injected }) => {
   const difficult = problem.difficulty
   useEffect(() => {
     setSubmitted(false)
-  }, [])
+  }, [problem])
 
   const handlecode = async () => {
     const title = problem.title;
@@ -34,7 +36,7 @@ const TestCases = ({ injected }) => {
       credentials:"include"
     })
     const data = await res.json();
-   const prevIdRef = useRef(null);
+  
 
 suburl.current = data.submissionID;
 // leave previous room
