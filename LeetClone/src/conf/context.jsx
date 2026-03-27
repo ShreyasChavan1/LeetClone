@@ -57,7 +57,7 @@ useEffect(() => {
       setStatus(data.status || "Processing");
       setVerdict(data.verdict || "Pending");
     }
-    if (data.verdict && data.verdict !== 'Accepted')
+    if (data.verdict && data.verdict !== 'Accepted'){
       const sub = await fetch(`${BACKEND_URL}/status/${encodeURIComponent(suburl.current)}`)
       const res = await sub.json();
       setOutput(res.result)
